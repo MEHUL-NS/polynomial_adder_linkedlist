@@ -3,14 +3,16 @@
 
 struct Node{
     int pow , coeff;
+    char sign;
     struct Node *next;
 };
 
 
-void pushBegin(int co , int p , struct Node **last){
+void pushBegin(char s , int co , int p , struct Node **last){
     struct Node *temp = (struct Node*)malloc(sizeof(struct Node));
     temp->pow = p;
     temp->coeff = co;
+    temp->sign = s;
     if(*last==NULL){
         temp->next = temp;
         (*last) = temp;
@@ -23,17 +25,18 @@ void pushBegin(int co , int p , struct Node **last){
 
 void generateEquation(int x , struct Node **last){
     int p,c;
+    char s;
     for(int i=0;i<x;i++){
-        printf("Enter coefficient and power : ");
-        scanf("%d %d",&c,&p);
-        pushBegin(c,p,&(*last));
+        printf("Enter sign coefficient and power : ");
+        scanf(" %s %d %d",&s,&c,&p);
+        pushBegin(s,c,p,&(*last));
     }
 }
 
 void viewList(struct Node **last){
     struct Node *temp = (*last)->next;
     do{
-        printf("%dx^%d  " , temp->coeff , temp->pow);
+        printf("%c%dx^%d  " , temp->sign,temp->coeff , temp->pow);
         temp=temp->next;
     }while(temp!=(*last)->next);
 }
