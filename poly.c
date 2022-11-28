@@ -34,22 +34,19 @@ void generateEquation(int x , struct Node **last){
     }
 }
 
-int calc(struct Node **p1 , struct Node **p2 ,struct Node **res){
+void calc(struct Node **p1 , struct Node **p2 ,struct Node **res){
     if((*p1)->sign == (*p2)->sign){
         int ans = (*p1)->coeff + (*p2)->coeff;
-        pushBegin((*p1)->sign , ans , (*p1)->pow , &(*res));      
+        pushBegin((*p1)->sign , ans , (*p1)->pow , &(*res));    
     }
-    else{
-        int v1 = (*p1)->coeff;
-        int v2 = (*p2)->coeff; 
+    else{       
+        if((*p1)->coeff == (*p2)->coeff) return;
         char s;
-        if(v1 > v2){
-            int ans = v1-v2;
-            pushBegin((*p1)->sign, ans , (*p1)->pow , &(*res));           
+        if((*p1)->coeff > (*p2)->coeff){           
+            pushBegin((*p1)->sign, (*p1)->coeff-(*p2)->coeff , (*p1)->pow , &(*res));           
         }
-        else{
-            int ans = v2-v1;
-            pushBegin((*p2)->sign, ans , (*p1)->pow , &(*res));           
+        else{            
+            pushBegin((*p2)->sign, (*p2)->coeff-(*p1)->coeff , (*p1)->pow , &(*res));           
         }
     }    
 }
@@ -76,12 +73,20 @@ void compareEq(struct Node **p1 , struct Node **p2 , struct Node **res){
         }
     }while(ptr1!=(*p1)->next && ptr2!=(*p2)->next);
 
+    while(ptr1 != (*p1)->next){
+        pushBegin(ptr1->sign , ptr1->coeff , ptr1->pow , &(*res));
+        ptr1 = ptr1->next;}
+    while(ptr2 != (*p2)->next){
+        pushBegin(ptr2->sign , ptr2->coeff , ptr2->pow , &(*res));
+        ptr2 = ptr2->next;}
+
+    
 }
 
 void viewList(struct Node **last){
     struct Node *temp = (*last)->next;
     do{
-        printf("%c%dx^%d  " , temp->sign,temp->coeff , temp->pow);
+        printf("%c%dx^%d " , temp->sign,temp->coeff , temp->pow);
         temp=temp->next;
     }while(temp!=(*last)->next);
 }
@@ -100,8 +105,8 @@ int main(){
     compareEq(&p1,&p2,&res);
 
     viewList(&p1);
-    printf("\n");
+    printf(" + ");
     viewList(&p2);
-    printf("\nAnswer : \n");
-    viewList(&res);
+    printf("\nAnswer : ");
+    viewList(&res);    
 }
